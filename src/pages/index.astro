@@ -1,0 +1,327 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { subjects } from '../data/subjects';
+import { news } from '../data/news';
+
+const latestNews = news[0];
+const featuredSubjects = subjects.slice(0, 6);
+---
+<BaseLayout
+  title="Critical Thinking Symposium | Slow down. Think deeper."
+  description="A toolkit for teachers supporting students in UK university humanities applications. Deep-dive reading, interview question generators, and grey-area case studies."
+>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container hero-inner">
+      <div class="hero-text">
+        <span class="kicker">For teachers. For thinkers. For Higher Education Humanities.</span>
+        <h1>Slow down.<br /><em>Think deeper.</em></h1>
+        <p class="lead">
+          The Critical Thinking Symposium helps teachers guide students through the thinking that
+          matters most: not quick answers, but slow, careful, curious engagement with ideas.
+        </p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="/toolkit/">Interview Toolkit</a>
+          <a class="btn btn-secondary" href="/deep-dive/">Deep Dive Reading</a>
+        </div>
+      </div>
+      <div class="hero-aside" aria-hidden="true">
+        <blockquote class="hero-quote">
+          <p>&#8220;The best candidates aren&#8217;t the ones with the quickest answers. They&#8217;re the ones who slow down when the question gets interesting.&#8221;</p>
+        </blockquote>
+      </div>
+    </div>
+  </section>
+
+  <!-- Philosophy strip -->
+  <section class="section section-band">
+    <div class="container philosophy-grid">
+      <div class="philosophy-text">
+        <span class="kicker">The tortoise, not the hare</span>
+        <h2>Why slow thinking wins</h2>
+        <p>
+          We live in a culture of fast answers. Search engines, AI assistants, and revision apps
+          reward students who retrieve information quickly. University interviews reward something
+          different: the ability to pause, to notice that a question is harder than it looks, and
+          to think out loud without reaching for a memorised answer.
+        </p>
+        <p>
+          This site is built on one conviction: the students who do best are the ones who have
+          practised being a tortoise.
+        </p>
+        <a href="/about/" class="btn btn-secondary">More about our approach</a>
+      </div>
+      <div class="philosophy-pillars">
+        <div class="pillar">
+          <span class="pillar-icon" aria-hidden="true">⬡</span>
+          <h3>Three question qualities</h3>
+          <p>Simple, grey, deep. Every great conversation starts with knowing which kind of question you are asking.</p>
+        </div>
+        <div class="pillar">
+          <span class="pillar-icon" aria-hidden="true">⬡</span>
+          <h3>Three question forms</h3>
+          <p>&#8220;What is X?&#8221;, &#8220;What is X for?&#8221;, &#8220;What are the types of X?&#8221; — three angles on any concept.</p>
+        </div>
+        <div class="pillar">
+          <span class="pillar-icon" aria-hidden="true">⬡</span>
+          <h3>The Five Whys</h3>
+          <p>Layer follow-up questions to uncover the assumptions underneath the first answer.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Toolkit preview -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <span class="kicker">Interview Toolkit</span>
+        <h2>Generate questions from any text or concept</h2>
+        <p class="lead">
+          Paste a short passage, name a theory, a thinker, or a concept — and get a structured
+          question set built from the three question forms and five follow-up prompts.
+        </p>
+      </div>
+      <div class="toolkit-preview-grid">
+        <div class="toolkit-card">
+          <div class="tag">Question form</div>
+          <h3>&#8220;What is X?&#8221;</h3>
+          <p>Surfaces hidden assumptions in apparently simple definitions. The best starting question for any interview preparation session.</p>
+        </div>
+        <div class="toolkit-card">
+          <div class="tag">Question form</div>
+          <h3>&#8220;What is X for?&#8221;</h3>
+          <p>Shifts from definition to function. Often reveals that the same thing serves different purposes for different people.</p>
+        </div>
+        <div class="toolkit-card">
+          <div class="tag">Question form</div>
+          <h3>&#8220;Types of X?&#8221;</h3>
+          <p>Asks students to classify — and then to question their own categories. A taxonomy exercise that opens into epistemology.</p>
+        </div>
+      </div>
+      <div class="section-cta">
+        <a class="btn btn-primary" href="/toolkit/">Open the Interview Toolkit</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Subjects -->
+  <section class="section section-band">
+    <div class="container">
+      <div class="section-header">
+        <span class="kicker">By Subject</span>
+        <h2>Tailored resources for seven humanities subjects</h2>
+      </div>
+      <ul class="subject-grid card-grid">
+        {featuredSubjects.map((s) => (
+          <li>
+            <a class="subject-card" href={`/subjects/${s.slug}/`} style={`--subject-colour: ${s.colour}`}>
+              <span class="subject-dot" aria-hidden="true"></span>
+              <h3>{s.title}</h3>
+              <p>{s.tagline}</p>
+            </a>
+          </li>
+        ))}
+      </ul>
+      <div class="section-cta">
+        <a class="btn btn-secondary" href="/subjects/">All subjects</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Latest news -->
+  {latestNews && (
+    <section class="section">
+      <div class="container news-preview">
+        <div>
+          <span class="kicker">News &amp; Events</span>
+          <h2>Latest</h2>
+        </div>
+        <div class="news-card">
+          <div class="tag">{latestNews.category === 'event' ? 'Event' : 'News'}</div>
+          <h3>{latestNews.title}</h3>
+          <p>{latestNews.summary}</p>
+          <a class="btn btn-secondary" href="/news/">All news &amp; events</a>
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- CTA band -->
+  <section class="section section-charcoal">
+    <div class="container cta-band">
+      <div>
+        <span class="kicker">For teachers</span>
+        <h2>Everything your students need to think better</h2>
+        <p class="lead">
+          Reading lists, interview question generators, grey-area case studies, and teacher notes
+          — all in one place.
+        </p>
+      </div>
+      <div class="cta-band-actions">
+        <a class="btn btn-primary" href="/toolkit/">Interview Toolkit</a>
+        <a class="btn btn-outline-light" href="/about/">Teacher Notes</a>
+      </div>
+    </div>
+  </section>
+
+</BaseLayout>
+
+<style>
+  /* Hero */
+  .hero {
+    padding: clamp(4rem, 10vw, 8rem) 0 clamp(3rem, 7vw, 6rem);
+    border-bottom: 1px solid var(--border);
+  }
+  .hero-inner {
+    display: grid;
+    gap: 3rem;
+    align-items: center;
+  }
+  @media (min-width: 860px) {
+    .hero-inner { grid-template-columns: 1fr 1fr; }
+  }
+  .hero-text h1 em {
+    font-style: italic;
+    color: var(--green);
+  }
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    margin-top: 2rem;
+  }
+  .hero-aside {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .hero-quote {
+    background: var(--charcoal);
+    color: #d4d4e8;
+    border-left: 5px solid var(--green);
+    border-radius: var(--radius);
+    padding: 2rem 2.2rem;
+    margin: 0;
+    font-family: var(--font-serif);
+    font-size: clamp(1.05rem, 2vw, 1.3rem);
+    font-weight: 400;
+    line-height: 1.55;
+  }
+  .hero-quote p { margin: 0; }
+
+  /* Philosophy */
+  .philosophy-grid {
+    display: grid;
+    gap: 3rem;
+    align-items: start;
+  }
+  @media (min-width: 860px) {
+    .philosophy-grid { grid-template-columns: 1fr 1fr; }
+  }
+  .philosophy-text p { color: var(--muted); }
+  .philosophy-pillars {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  .pillar {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+  .pillar-icon {
+    font-size: 1.4rem;
+    color: var(--green);
+    flex-shrink: 0;
+    margin-top: 0.1rem;
+  }
+  .pillar h3 { font-size: 1rem; margin-bottom: 0.3rem; }
+  .pillar p { font-size: 0.93rem; color: var(--muted); margin: 0; }
+
+  /* Toolkit preview */
+  .section-header { max-width: 42rem; margin-bottom: 2.5rem; }
+  .section-header .lead { margin-bottom: 0; }
+  .toolkit-preview-grid {
+    display: grid;
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+  }
+  @media (min-width: 640px) {
+    .toolkit-preview-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (min-width: 900px) {
+    .toolkit-preview-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+  .toolkit-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.6rem;
+  }
+  .toolkit-card h3 { font-size: 1.15rem; margin-bottom: 0.5rem; }
+  .toolkit-card p { margin: 0; color: var(--muted); font-size: 0.95rem; }
+  .section-cta { margin-top: 0.5rem; }
+
+  /* Subjects */
+  .subject-grid { margin-bottom: 2rem; }
+  .subject-card {
+    display: block;
+    text-decoration: none;
+    background: var(--surface);
+    border: 2px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.6rem;
+    transition: border-color 0.22s var(--ease), box-shadow 0.22s var(--ease), transform 0.22s var(--ease);
+    height: 100%;
+  }
+  .subject-card:hover {
+    border-color: var(--subject-colour, var(--green));
+    box-shadow: 0 4px 20px rgba(28, 28, 46, 0.08);
+    transform: translateY(-2px);
+  }
+  .subject-dot {
+    display: block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--subject-colour, var(--green));
+    margin-bottom: 0.8rem;
+  }
+  .subject-card h3 { font-size: 1.05rem; color: var(--charcoal); margin-bottom: 0.35rem; }
+  .subject-card p { margin: 0; font-size: 0.88rem; color: var(--muted); }
+
+  /* News preview */
+  .news-preview {
+    display: grid;
+    gap: 2.5rem;
+    align-items: start;
+  }
+  @media (min-width: 700px) {
+    .news-preview { grid-template-columns: 1fr 2fr; }
+  }
+  .news-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 2rem;
+  }
+  .news-card h3 { margin-bottom: 0.6rem; }
+
+  /* CTA band */
+  .cta-band {
+    display: grid;
+    gap: 2.5rem;
+    align-items: center;
+  }
+  @media (min-width: 780px) {
+    .cta-band { grid-template-columns: 1fr auto; }
+  }
+  .cta-band-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    flex-shrink: 0;
+  }
+</style>

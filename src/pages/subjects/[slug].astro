@@ -1,0 +1,208 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { subjects } from '../../data/subjects';
+import { readings } from '../../data/reading';
+
+export function getStaticPaths() {
+  return subjects.map((s) => ({ params: { slug: s.slug }, props: { subject: s } }));
+}
+
+const { subject } = Astro.props;
+const subjectReadings = readings.filter((r) => r.subjects.includes(subject.slug));
+
+const difficultyOrder: Record<string, number> = { accessible: 0, moderate: 1, challenging: 2 };
+subjectReadings.sort((a, b) => (difficultyOrder[a.difficulty] ?? 9) - (difficultyOrder[b.difficulty] ?? 9));
+
+const difficultyLabels: Record<string, string> = {
+  accessible: 'Accessible',
+  moderate: 'Moderate',
+  challenging: 'Challenging',
+};
+---
+<BaseLayout
+  title={`${subject.title} — Critical Thinking Symposium`}
+  description={`Interview preparation resources for ${subject.title}: recommended texts, grey-area questions, and an interview question generator.`}
+>
+
+  <div class="page-header" style={`--subject-colour: ${subject.colour}`}>
+    <div class="container">
+      <a href="/subjects/" class="back-link">&larr; All subjects</a>
+      <span class="kicker" style="color: var(--subject-colour)">{subject.title}</span>
+      <h1>{subject.title}</h1>
+      <p class="lead">{subject.tagline}</p>
+    </div>
+  </div>
+
+  <!-- Subject description -->
+  <section class="section section-band">
+    <div class="container about-subject">
+      <div>
+        <h2>About this subject</h2>
+        <p>{subject.description}</p>
+        <p>
+          The resources on this page are designed for students preparing for university interviews
+          in {subject.title}. They combine recommended reading with the Interview Toolkit&#8217;s
+          question generator — so you can move directly from a text to the questions a tutor might
+          ask about it.
+        </p>
+      </div>
+      <div class="quick-actions">
+        <a class="btn btn-primary" href={`/toolkit/?subject=${subject.slug}`}>
+          Open Interview Toolkit
+        </a>
+        <a class="btn btn-secondary" href="/deep-dive/">
+          All reading lists
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Reading for this subject -->
+  {subjectReadings.length > 0 && (
+    <section class="section">
+      <div class="container">
+        <span class="kicker">Reading for {subject.title}</span>
+        <h2>Recommended texts</h2>
+        <ul class="reading-list">
+          {subjectReadings.map((r) => (
+            <li class="reading-item">
+              <div class="reading-meta-row">
+                <span class={`difficulty-badge difficulty-${r.difficulty}`}>
+                  {difficultyLabels[r.difficulty] ?? r.difficulty}
+                </span>
+                {r.year && <span class="reading-year">{r.year}</span>}
+              </div>
+              <h3 class="reading-title">
+                <em>{r.title}</em> — {r.author}
+              </h3>
+              <div class="reading-why">
+                <span class="why-label">Why this text?</span>
+                <p>{r.why}</p>
+              </div>
+              <a class="use-in-toolkit" href={`/toolkit/?term=${encodeURIComponent(r.title)}`}>
+                Use in Toolkit &rarr;
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  )}
+
+  <!-- Sample grey questions (placeholder) -->
+  <section class="section section-band">
+    <div class="container">
+      <span class="kicker">Grey-area questions for {subject.title}</span>
+      <h2>Questions with no clean answer</h2>
+      <p class="section-intro">
+        These are starter questions for classroom discussion or interview preparation. They are
+        chosen because they surface genuine disagreement — not because there is a right answer.
+      </p>
+      <div class="placeholder-notice">
+        <p>
+          <strong>Note for Beth:</strong> Please add 4–6 grey-area questions specific to {subject.title} here.
+          These should be questions that reward a slow, careful discussion — no single correct answer.
+        </p>
+      </div>
+      <div class="toolkit-prompt">
+        <p>In the meantime, use the Interview Toolkit to generate questions around any concept from {subject.title}.</p>
+        <a class="btn btn-primary" href={`/toolkit/`}>Open Interview Toolkit</a>
+      </div>
+    </div>
+  </section>
+
+</BaseLayout>
+
+<style>
+  .page-header {
+    padding: clamp(3rem, 7vw, 5rem) 0;
+    background: var(--charcoal);
+    border-bottom: 4px solid var(--subject-colour, var(--green));
+  }
+  .page-header h1 { color: #ffffff; }
+  .back-link {
+    display: inline-block;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.65);
+    text-decoration: none;
+    margin-bottom: 1rem;
+    transition: color 0.2s;
+  }
+  .back-link:hover { color: #ffffff; }
+
+  .about-subject {
+    display: grid;
+    gap: 2.5rem;
+    align-items: start;
+  }
+  @media (min-width: 700px) {
+    .about-subject { grid-template-columns: 1fr auto; }
+  }
+  .about-subject p { color: var(--muted); }
+  .quick-actions { display: flex; flex-direction: column; gap: 0.7rem; flex-shrink: 0; }
+
+  /* Reading list */
+  .reading-list { list-style: none; padding: 0; margin: 1.5rem 0 0; }
+  .reading-item {
+    border-top: 1px solid var(--border);
+    padding: 1.8rem 0;
+  }
+  .reading-item:last-child { border-bottom: 1px solid var(--border); }
+  .reading-meta-row { display: flex; align-items: center; gap: 0.8rem; margin-bottom: 0.7rem; flex-wrap: wrap; }
+  .difficulty-badge {
+    display: inline-block;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.25rem 0.7rem;
+    border-radius: 4px;
+  }
+  .difficulty-accessible { background: var(--green-tint); color: var(--green-dark); }
+  .difficulty-moderate { background: #fef3e8; color: #8b4d1b; }
+  .difficulty-challenging { background: #e8e8f4; color: var(--charcoal); }
+  .reading-year { font-size: 0.88rem; color: var(--muted); }
+  .reading-title { font-size: clamp(1.1rem, 2vw, 1.3rem); margin-bottom: 0.8rem; }
+  .reading-title em { font-style: italic; }
+  .reading-why {
+    background: var(--green-tint);
+    border-left: 3px solid var(--green);
+    padding: 0.9rem 1rem 0.9rem 1.1rem;
+    border-radius: 0 8px 8px 0;
+    margin-bottom: 1rem;
+  }
+  .why-label {
+    display: inline-block;
+    font-size: 0.77rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--green-dark);
+    margin-bottom: 0.3rem;
+  }
+  .reading-why p { margin: 0; font-size: 0.93rem; color: var(--charcoal-soft); }
+  .use-in-toolkit {
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--green);
+    text-decoration: none;
+  }
+  .use-in-toolkit:hover { color: var(--green-dark); }
+
+  .section-intro { max-width: 42rem; margin-bottom: 1.5rem; color: var(--muted); }
+  .placeholder-notice {
+    background: #fffbe6;
+    border: 1px solid #e6d800;
+    border-radius: 8px;
+    padding: 1rem 1.2rem;
+    margin-bottom: 1.5rem;
+    font-size: 0.9rem;
+  }
+  .toolkit-prompt {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+  }
+  .toolkit-prompt p { margin: 0; color: var(--muted); }
+</style>

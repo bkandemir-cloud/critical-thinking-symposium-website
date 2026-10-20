@@ -1,0 +1,116 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const resources = [
+  {
+    category: 'Podcasts',
+    items: [
+      {
+        title: 'Philosophy Bites',
+        url: null,
+        description: 'Short interviews with philosophers on focused questions. Ideal for introducing key thinkers and problems. Episodes average 15–20 minutes.',
+      },
+      {
+        title: 'In Our Time (BBC Radio 4)',
+        url: null,
+        description: 'Melvyn Bragg chairs expert discussions on a huge range of intellectual history topics. Searchable by subject. An indispensable archive.',
+      },
+      {
+        title: 'Philosophize This!',
+        url: null,
+        description: 'An accessible, well-paced history of philosophy from the beginning. Good for students who want intellectual context before reading primary texts.',
+      },
+    ],
+  },
+  {
+    category: 'Online courses and lectures',
+    items: [
+      {
+        title: 'Justice — Michael Sandel (Harvard)',
+        url: null,
+        description: 'Twelve lectures on moral and political philosophy, freely available online. Sandel is an exceptional teacher and the lectures model the kind of Socratic dialogue this site promotes.',
+      },
+      {
+        title: 'Yale Open Courses — Philosophy, History',
+        url: null,
+        description: 'A range of full university lecture series, freely available. Particularly strong on Ancient Greek philosophy, political philosophy, and modern European history.',
+      },
+    ],
+  },
+  {
+    category: 'Useful guides for teachers',
+    items: [
+      {
+        title: 'The Socratic Method (a practical guide)',
+        url: null,
+        description: 'A range of practical guides to running Socratic seminars in the classroom — structuring questions, managing silence, and building productive disagreement.',
+      },
+    ],
+  },
+];
+---
+<BaseLayout
+  title="Courses & Resources — Critical Thinking Symposium"
+  description="Recommended courses, podcasts, lectures, and resources for students and teachers preparing for university humanities interviews."
+>
+
+  <div class="page-header section-charcoal">
+    <div class="container">
+      <span class="kicker">Courses &amp; Resources</span>
+      <h1>Going further</h1>
+      <p class="lead">
+        Recommended podcasts, lecture series, and online courses for teachers and students
+        who want to go beyond the classroom.
+      </p>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="container prose">
+      <div class="resources-notice">
+        <p>
+          <strong>Note for Beth:</strong> This section is a placeholder. Please add, remove, or
+          annotate resources as you see fit. URLs will be added once confirmed.
+        </p>
+      </div>
+
+      {resources.map((group) => (
+        <div class="resource-group">
+          <h2>{group.category}</h2>
+          <ul class="resource-list">
+            {group.items.map((item) => (
+              <li class="resource-item">
+                <h3 class="resource-title">{item.title}</h3>
+                <p class="resource-desc">{item.description}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+  </section>
+
+</BaseLayout>
+
+<style>
+  .page-header { padding: clamp(3rem, 7vw, 5rem) 0; }
+  .page-header h1 { color: #ffffff; }
+  .resources-notice {
+    background: #fffbe6;
+    border: 1px solid #e6d800;
+    border-radius: 8px;
+    padding: 1rem 1.2rem;
+    margin-bottom: 2.5rem;
+    font-size: 0.9rem;
+  }
+  .resource-group { margin-bottom: 3rem; }
+  .resource-list { list-style: none; padding: 0; margin: 1rem 0 0; display: flex; flex-direction: column; gap: 1.2rem; }
+  .resource-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.4rem;
+  }
+  .resource-title { font-size: 1.05rem; margin-bottom: 0.4rem; }
+  .resource-desc { font-size: 0.93rem; color: var(--muted); margin: 0; }
+</style>

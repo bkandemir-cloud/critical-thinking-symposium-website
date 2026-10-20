@@ -1,0 +1,596 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { questionTemplates, formLabels, depthLabels, depthDescriptions } from '../../data/questionTemplates';
+import type { QuestionForm, QuestionDepth } from '../../data/questionTemplates';
+
+const greyExamples = [
+  {
+    term: 'sandwich',
+    note: 'Is a hot dog a sandwich? The answer depends entirely on how you define "sandwich" — which is the point.',
+  },
+  {
+    term: 'country',
+    note: 'Is Taiwan a country? There is no definition of "country" that resolves this cleanly. That\'s what makes it interesting.',
+  },
+  {
+    term: 'natural resource',
+    note: 'Is a virus a natural resource? Arguing either side requires you to define "resource" and "natural" — and those definitions are contested.',
+  },
+  {
+    term: 'justice',
+    note: 'A concept every student thinks they understand — until they try to define it precisely.',
+  },
+  {
+    term: 'art',
+    note: 'The defining question of aesthetics. Not "what is good art?" but "what makes something art at all?"',
+  },
+];
+---
+<BaseLayout
+  title="Interview Toolkit — Critical Thinking Symposium"
+  description="Generate structured interview questions from any text, concept, or thinker. Based on the three question forms and Five Whys technique."
+>
+
+  <!-- Page header -->
+  <div class="page-header section-charcoal">
+    <div class="container">
+      <span class="kicker">Interview Toolkit</span>
+      <h1>Generate questions from any concept</h1>
+      <p class="lead">
+        Enter a term, concept, text title, or thinker. Choose your question forms and depths.
+        The toolkit generates a structured question set — plus Five Whys follow-ups — to drive
+        an interview preparation session.
+      </p>
+    </div>
+  </div>
+
+  <!-- Generator -->
+  <section class="section">
+    <div class="container">
+      <div class="generator-layout">
+
+        <!-- Controls -->
+        <div class="generator-controls">
+          <form id="generator-form" novalidate>
+            <div class="field">
+              <label for="term-input">Term or concept</label>
+              <input
+                id="term-input"
+                type="text"
+                placeholder="e.g. justice, art, a sandwich, Foucault, The Communist Manifesto"
+                autocomplete="off"
+                maxlength="120"
+              />
+              <p class="field-help">Enter a single noun or noun phrase. Keep it short and concrete.</p>
+            </div>
+
+            <fieldset class="field">
+              <legend>Question forms</legend>
+              <div class="checkbox-group">
+                <label class="checkbox-label">
+                  <input type="checkbox" name="form" value="what-is" checked />
+                  <span><strong>&ldquo;What is X?&rdquo;</strong> — definition and assumptions</span>
+                </label>
+                <label class="checkbox-label">
+                  <input type="checkbox" name="form" value="what-is-for" checked />
+                  <span><strong>&ldquo;What is X for?&rdquo;</strong> — function and purpose</span>
+                </label>
+                <label class="checkbox-label">
+                  <input type="checkbox" name="form" value="types-of" />
+                  <span><strong>&ldquo;Types of X?&rdquo;</strong> — taxonomy and categories</span>
+                </label>
+              </div>
+            </fieldset>
+
+            <fieldset class="field">
+              <legend>Question depths</legend>
+              <div class="checkbox-group">
+                <label class="checkbox-label">
+                  <input type="checkbox" name="depth" value="simple" checked />
+                  <span><strong>Simple</strong> — direct, but harder than it looks</span>
+                </label>
+                <label class="checkbox-label">
+                  <input type="checkbox" name="depth" value="grey" checked />
+                  <span><strong>Grey</strong> — no clean answer; the conversation is the point</span>
+                </label>
+                <label class="checkbox-label">
+                  <input type="checkbox" name="depth" value="deep" />
+                  <span><strong>Deep</strong> — makes the concept itself strange</span>
+                </label>
+              </div>
+            </fieldset>
+
+            <button type="submit" class="btn btn-primary generate-btn">
+              Generate questions
+            </button>
+          </form>
+        </div>
+
+        <!-- Output -->
+        <div class="generator-output" id="generator-output" aria-live="polite">
+          <div class="output-placeholder" id="output-placeholder">
+            <p class="placeholder-icon" aria-hidden="true">⬡</p>
+            <p>Your questions will appear here.</p>
+            <p class="placeholder-sub">Try <strong>&ldquo;justice&rdquo;</strong> or <strong>&ldquo;art&rdquo;</strong> to start.</p>
+          </div>
+          <div class="output-results hidden" id="output-results"></div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Grey-area examples -->
+  <section class="section section-band">
+    <div class="container">
+      <span class="kicker">Grey-area cases</span>
+      <h2>Ready-made examples for your classroom</h2>
+      <p class="section-intro">
+        These borderline cases work especially well because they feel trivial — until students
+        try to argue them. The argument forces a definition, and the definition reveals everything.
+      </p>
+      <ul class="grey-examples">
+        {greyExamples.map((ex) => (
+          <li class="grey-example">
+            <button class="grey-try-btn" data-term={ex.term} type="button" aria-label={`Use "${ex.term}" as the question term`}>
+              Use &ldquo;{ex.term}&rdquo;
+            </button>
+            <div class="grey-example-body">
+              <strong class="grey-term">{ex.term}</strong>
+              <p>{ex.note}</p>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <!-- Five Whys -->
+  <section class="section">
+    <div class="container five-whys-layout">
+      <div>
+        <span class="kicker">The Five Whys</span>
+        <h2>Go deeper with layered questioning</h2>
+        <p>
+          The Five Whys is a technique borrowed from root-cause analysis: you ask
+          &#8220;why?&#8221; five times in succession, each time taking the previous answer as
+          the next premise. Used in interview preparation, it teaches students to question
+          their own first answers rather than stopping at a superficially satisfying response.
+        </p>
+        <p>
+          The toolkit attaches five follow-up prompts to each generated question. Teachers should
+          not use all five at once — pick the one that the student&#8217;s first answer makes most
+          productive.
+        </p>
+      </div>
+      <div class="five-whys-demo">
+        <div class="five-whys-card">
+          <div class="tag">Worked example</div>
+          <p class="five-whys-q"><strong>Question:</strong> What is art?</p>
+          <ol class="five-whys-list">
+            <li><em>Why does it matter how we define art?</em> <span class="why-note">Surfaces the stakes</span></li>
+            <li><em>What would change if our definition were different?</em> <span class="why-note">Tests the definition</span></li>
+            <li><em>Is art a natural category or a human invention?</em> <span class="why-note">Goes metaphysical</span></li>
+            <li><em>Who gets to decide what counts as art?</em> <span class="why-note">Opens into politics and power</span></li>
+            <li><em>Can something be partly art and partly not?</em> <span class="why-note">Tests the edges</span></li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</BaseLayout>
+
+<!-- Question generator script (all client-side, no API) -->
+<script>
+  import type { QuestionForm, QuestionDepth } from '../../data/questionTemplates';
+
+  interface Template {
+    form: QuestionForm;
+    depth: QuestionDepth;
+    pattern: (t: string) => string;
+    fiveWhysPatterns: ((t: string) => string)[];
+    teacherNote?: string;
+  }
+
+  // Templates embedded inline to avoid a module import in client script
+  const templates: Template[] = [
+    { form: 'what-is', depth: 'simple',
+      pattern: (t) => `What is ${t}?`,
+      fiveWhysPatterns: [
+        (t) => `Why does it matter how we define ${t}?`,
+        (t) => `What would change if our definition of ${t} were different?`,
+        (t) => `Is ${t} a natural category or a human invention?`,
+        (t) => `Who gets to decide what counts as ${t}?`,
+        (t) => `Can something be partly ${t} and partly not?`,
+      ],
+      teacherNote: 'Start here. Students often assume they know what a term means. This question surfaces hidden assumptions.',
+    },
+    { form: 'what-is', depth: 'grey',
+      pattern: (t) => `Is ${t} always easy to identify — or are there cases where it is genuinely unclear?`,
+      fiveWhysPatterns: [
+        (t) => `What makes a borderline case of ${t} borderline?`,
+        (t) => `Does the ambiguity point to something in the world, or in our concept?`,
+        (t) => `Could we resolve the borderline case by adding more information, or is the uncertainty irreducible?`,
+        (t) => `What's at stake when we disagree about whether something is ${t}?`,
+        (t) => `If two experts disagree about a case, does one have to be wrong?`,
+      ],
+      teacherNote: 'Grey questions are the engine of interview conversations. The best candidates look for the edges, not the centre.',
+    },
+    { form: 'what-is', depth: 'deep',
+      pattern: (t) => `What would we lose if the concept of ${t} disappeared from our thinking entirely?`,
+      fiveWhysPatterns: [
+        (t) => `Is ${t} doing work that no other concept could do?`,
+        (t) => `Has the meaning of ${t} changed across history or cultures?`,
+        (t) => `Is ${t} a useful fiction, or does it pick out something real?`,
+        (t) => `What does the existence of ${t} as a concept tell us about the people who use it?`,
+        (t) => `Could we redesign ${t} to be more precise — and what would we gain or lose?`,
+      ],
+      teacherNote: 'The deepest form of the "What is X?" question. Push students who have given a good definition toward this.',
+    },
+    { form: 'what-is-for', depth: 'simple',
+      pattern: (t) => `What is ${t} for?`,
+      fiveWhysPatterns: [
+        (t) => `Who benefits most from ${t}?`,
+        (t) => `Would society function differently without ${t}?`,
+        (t) => `Is the purpose of ${t} different for different people?`,
+        (t) => `Has the purpose of ${t} changed over time?`,
+        (t) => `Is ${t} a means to an end, or is it valuable in itself?`,
+      ],
+      teacherNote: 'This shifts focus from definition to function. Students often find this easier to engage with, so use it to build confidence before moving to deeper forms.',
+    },
+    { form: 'what-is-for', depth: 'grey',
+      pattern: (t) => `Is the purpose of ${t} straightforward — or do different people use it for different, and possibly conflicting, ends?`,
+      fiveWhysPatterns: [
+        (t) => `Can ${t} be misused? What would that tell us about its proper use?`,
+        (t) => `If ${t} serves conflicting purposes, which purpose should take priority?`,
+        (t) => `Is there a tension between what ${t} is officially for and what it actually does?`,
+        (t) => `Could ${t} serve its purpose better by being different?`,
+        (t) => `Does knowing what ${t} is for change how we evaluate it?`,
+      ],
+    },
+    { form: 'what-is-for', depth: 'deep',
+      pattern: (t) => `If ${t} did not exist, would we need to invent it? What does the answer reveal?`,
+      fiveWhysPatterns: [
+        (t) => `Is the need that ${t} meets universal, or culturally specific?`,
+        (t) => `Does ${t} create the very need it claims to fulfil?`,
+        (t) => `What assumptions about human nature are built into ${t}?`,
+        (t) => `Is there a version of society in which ${t} would be unnecessary?`,
+        (t) => `What does the fact that we have ${t} tell us about the world we live in?`,
+      ],
+      teacherNote: 'A demanding form. Best used when students are fluent with the simpler version. The counter-question "Does X create the need it claims to fulfil?" can open very rich discussions.',
+    },
+    { form: 'types-of', depth: 'simple',
+      pattern: (t) => `What are the different types of ${t}?`,
+      fiveWhysPatterns: [
+        (t) => `Do all types of ${t} share something in common, or is it just a word we use for convenience?`,
+        (t) => `Are some types of ${t} more important than others?`,
+        (t) => `Is the division into types natural, or have we imposed it?`,
+        (t) => `Could the same thing belong to more than one type?`,
+        (t) => `Are there any types of ${t} that most people don't notice?`,
+      ],
+      teacherNote: 'Taxonomy exercises are a gentle way into analysis. Ask students to justify their categories, not just list them.',
+    },
+    { form: 'types-of', depth: 'grey',
+      pattern: (t) => `Are the categories we use to classify ${t} natural — or have we imposed an arbitrary structure onto something more continuous?`,
+      fiveWhysPatterns: [
+        (t) => `What work do the categories do? What would we gain or lose by collapsing two of them?`,
+        (t) => `Can one ${t} shift from one category to another? What would trigger that shift?`,
+        (t) => `Are these the same categories everyone would use, or are they culturally specific?`,
+        (t) => `Is the hardest case to classify also the most interesting one?`,
+        (t) => `What happens at the edges between categories?`,
+      ],
+    },
+    { form: 'types-of', depth: 'deep',
+      pattern: (t) => `Is the very act of dividing ${t} into types a form of understanding, or a form of distortion?`,
+      fiveWhysPatterns: [
+        (t) => `Does classifying ${t} change it — or just describe it?`,
+        (t) => `Who has the authority to create or revise the taxonomy of ${t}?`,
+        (t) => `What would a radically different taxonomy of ${t} reveal?`,
+        (t) => `Are there things about ${t} that resist classification altogether?`,
+        (t) => `Is a perfect taxonomy of ${t} possible in principle, or always provisional?`,
+      ],
+      teacherNote: 'The deepest form of the types question. Ask this only after students have done the basic taxonomy; the contrast between their initial categories and this question creates productive discomfort.',
+    },
+  ];
+
+  const formLabels: Record<string, string> = {
+    'what-is': '"What is X?"',
+    'what-is-for': '"What is X for?"',
+    'types-of': '"Types of X?"',
+  };
+  const depthLabels: Record<string, string> = {
+    simple: 'Simple',
+    grey: 'Grey',
+    deep: 'Deep',
+  };
+
+  function escapeHtml(s: string): string {
+    return s
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  function renderResults(term: string, forms: string[], depths: string[]): string {
+    const matches = templates.filter(
+      (t) => forms.includes(t.form) && depths.includes(t.depth)
+    );
+    if (matches.length === 0) {
+      return '<p class="no-results">No questions match the selected forms and depths. Please choose at least one form and one depth.</p>';
+    }
+    const termSafe = escapeHtml(term);
+    let html = `<div class="results-header"><h3>Questions for &#8220;${termSafe}&#8221;</h3><p class="results-count">${matches.length} question${matches.length === 1 ? '' : 's'} generated</p></div>`;
+    for (const t of matches) {
+      const questionSafe = escapeHtml(t.pattern(term));
+      const formLabel = formLabels[t.form] ?? t.form;
+      const depthLabel = depthLabels[t.depth] ?? t.depth;
+      html += `
+      <div class="result-card depth-${t.depth}">
+        <div class="result-meta">
+          <span class="tag">${escapeHtml(formLabel)}</span>
+          <span class="depth-badge depth-badge-${t.depth}">${escapeHtml(depthLabel)}</span>
+        </div>
+        <p class="result-question">${questionSafe}</p>
+        ${t.teacherNote ? `<p class="result-note">&#128100; <em>${escapeHtml(t.teacherNote)}</em></p>` : ''}
+        <details class="five-whys-details">
+          <summary>Five Whys follow-ups</summary>
+          <ol class="five-whys-result">
+            ${t.fiveWhysPatterns.map((fn) => `<li>${escapeHtml(fn(term))}</li>`).join('')}
+          </ol>
+        </details>
+      </div>`;
+    }
+    return html;
+  }
+
+  const form = document.getElementById('generator-form') as HTMLFormElement;
+  const input = document.getElementById('term-input') as HTMLInputElement;
+  const placeholder = document.getElementById('output-placeholder') as HTMLElement;
+  const results = document.getElementById('output-results') as HTMLElement;
+
+  function run() {
+    const term = input.value.trim();
+    if (!term) {
+      input.focus();
+      return;
+    }
+    const forms = [...form.querySelectorAll<HTMLInputElement>('input[name="form"]:checked')].map((el) => el.value);
+    const depths = [...form.querySelectorAll<HTMLInputElement>('input[name="depth"]:checked')].map((el) => el.value);
+    placeholder.classList.add('hidden');
+    results.classList.remove('hidden');
+    results.innerHTML = renderResults(term, forms, depths);
+    results.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    run();
+  });
+
+  // Grey example buttons
+  document.querySelectorAll<HTMLButtonElement>('.grey-try-btn').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const term = btn.dataset.term ?? '';
+      input.value = term;
+      // Ensure what-is + grey are checked
+      form.querySelectorAll<HTMLInputElement>('input[name="form"]').forEach((cb) => {
+        cb.checked = cb.value === 'what-is' || cb.value === 'what-is-for';
+      });
+      form.querySelectorAll<HTMLInputElement>('input[name="depth"]').forEach((cb) => {
+        cb.checked = cb.value === 'grey' || cb.value === 'simple';
+      });
+      run();
+      document.getElementById('generator-form')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+</script>
+
+<style>
+  .page-header {
+    padding: clamp(3rem, 7vw, 5rem) 0;
+  }
+  .page-header h1 { color: #ffffff; }
+
+  /* Generator layout */
+  .generator-layout {
+    display: grid;
+    gap: 2.5rem;
+    align-items: start;
+  }
+  @media (min-width: 900px) {
+    .generator-layout { grid-template-columns: 380px 1fr; }
+  }
+
+  /* Controls */
+  .generator-controls {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 2rem;
+    position: sticky;
+    top: 80px;
+  }
+  .field { margin-bottom: 1.6rem; }
+  .field label,
+  .field legend {
+    display: block;
+    font-weight: 600;
+    font-size: 0.95rem;
+    margin-bottom: 0.5rem;
+    color: var(--charcoal);
+  }
+  .field input[type="text"] {
+    width: 100%;
+    padding: 0.7rem 0.9rem;
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    color: var(--text);
+    background: var(--bg);
+    transition: border-color 0.22s;
+  }
+  .field input[type="text"]:focus {
+    outline: none;
+    border-color: var(--green);
+  }
+  .field-help { font-size: 0.82rem; color: var(--muted); margin: 0.4rem 0 0; }
+  .checkbox-group { display: flex; flex-direction: column; gap: 0.6rem; }
+  .checkbox-label {
+    display: flex;
+    gap: 0.6rem;
+    align-items: flex-start;
+    cursor: pointer;
+    font-size: 0.93rem;
+    line-height: 1.4;
+  }
+  .checkbox-label input { margin-top: 0.15rem; flex-shrink: 0; accent-color: var(--green); }
+  .generate-btn { width: 100%; justify-content: center; margin-top: 0.5rem; }
+
+  /* Output */
+  .generator-output { min-height: 200px; }
+  .output-placeholder {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: var(--muted);
+  }
+  .placeholder-icon { font-size: 2.5rem; margin-bottom: 0.5rem; color: var(--green); opacity: 0.5; }
+  .placeholder-sub { font-size: 0.9rem; }
+  .hidden { display: none !important; }
+
+  .results-header { margin-bottom: 1.5rem; }
+  .results-header h3 { margin-bottom: 0.2rem; }
+  .results-count { color: var(--muted); font-size: 0.9rem; margin: 0; }
+
+  .result-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.5rem 1.6rem;
+    margin-bottom: 1.2rem;
+    border-left: 4px solid var(--green);
+  }
+  .result-card.depth-grey { border-left-color: #c77b3f; }
+  .result-card.depth-deep { border-left-color: var(--charcoal); }
+
+  .result-meta { display: flex; gap: 0.5rem; align-items: center; margin-bottom: 0.8rem; flex-wrap: wrap; }
+  .depth-badge {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 0.2rem 0.6rem;
+    border-radius: 4px;
+  }
+  .depth-badge-simple { background: var(--green-tint); color: var(--green-dark); }
+  .depth-badge-grey { background: #fef3e8; color: #8b4d1b; }
+  .depth-badge-deep { background: #e8e8f4; color: var(--charcoal); }
+
+  .result-question {
+    font-family: var(--font-serif);
+    font-size: 1.1rem;
+    font-weight: 500;
+    margin: 0 0 0.6rem;
+    color: var(--charcoal);
+  }
+  .result-note { font-size: 0.88rem; color: var(--muted); margin: 0 0 0.8rem; }
+
+  .five-whys-details summary {
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--green);
+    padding: 0.4rem 0;
+    list-style: none;
+  }
+  .five-whys-details summary::-webkit-details-marker { display: none; }
+  .five-whys-details summary::before { content: '+ '; }
+  .five-whys-details[open] summary::before { content: '− '; }
+  .five-whys-result {
+    margin: 0.6rem 0 0;
+    padding-left: 1.2rem;
+    font-size: 0.92rem;
+    color: var(--muted);
+  }
+  .five-whys-result li { margin-bottom: 0.4rem; }
+  .no-results { color: var(--muted); padding: 1rem 0; }
+
+  /* Grey examples */
+  .section-intro { max-width: 42rem; margin-bottom: 2rem; color: var(--muted); }
+  .grey-examples {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 1rem;
+  }
+  @media (min-width: 640px) {
+    .grey-examples { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (min-width: 900px) {
+    .grey-examples { grid-template-columns: repeat(3, 1fr); }
+  }
+  .grey-example {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.4rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+  .grey-try-btn {
+    background: var(--green-tint);
+    color: var(--green-dark);
+    border: none;
+    border-radius: 6px;
+    padding: 0.45rem 0.9rem;
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    align-self: flex-start;
+    transition: background 0.2s;
+  }
+  .grey-try-btn:hover { background: #d0ecdb; }
+  .grey-term { font-family: var(--font-serif); font-size: 1rem; color: var(--charcoal); display: block; margin-bottom: 0.25rem; }
+  .grey-example-body p { font-size: 0.9rem; color: var(--muted); margin: 0; }
+
+  /* Five Whys section */
+  .five-whys-layout {
+    display: grid;
+    gap: 3rem;
+    align-items: start;
+  }
+  @media (min-width: 860px) {
+    .five-whys-layout { grid-template-columns: 1fr 1fr; }
+  }
+  .five-whys-card {
+    background: var(--charcoal);
+    color: #d4d4e8;
+    border-radius: var(--radius);
+    padding: 2rem;
+  }
+  .five-whys-q {
+    color: #ffffff;
+    font-family: var(--font-serif);
+    font-size: 1.05rem;
+    margin-bottom: 1.2rem;
+  }
+  .five-whys-list {
+    padding-left: 1.2rem;
+    margin: 0;
+    font-size: 0.93rem;
+  }
+  .five-whys-list li { margin-bottom: 0.5rem; }
+  .why-note {
+    display: inline-block;
+    font-size: 0.78rem;
+    color: var(--green-light);
+    margin-left: 0.4rem;
+    font-style: normal;
+  }
+</style>

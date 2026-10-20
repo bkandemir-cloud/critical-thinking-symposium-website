@@ -1,0 +1,112 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { subjects } from '../../data/subjects';
+---
+<BaseLayout
+  title="By Subject — Critical Thinking Symposium"
+  description="Subject-specific resources for university humanities applicants: English Literature, History, Philosophy, Classics, Economics, PPE, and Theology."
+>
+
+  <div class="page-header section-charcoal">
+    <div class="container">
+      <span class="kicker">By Subject</span>
+      <h1>Resources for seven humanities subjects</h1>
+      <p class="lead">
+        Each subject page brings together recommended texts, key debates, grey-area questions,
+        and suggested interview question sets — all in one place.
+      </p>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="container">
+      <ul class="subjects-grid">
+        {subjects.map((s) => (
+          <li>
+            <a class="subject-card" href={`/subjects/${s.slug}/`} style={`--subject-colour: ${s.colour}`}>
+              <span class="subject-colour-bar" aria-hidden="true"></span>
+              <div class="subject-card-body">
+                <h2>{s.title}</h2>
+                <p class="subject-tagline">{s.tagline}</p>
+                <p class="subject-desc">{s.description}</p>
+                <span class="subject-link" aria-hidden="true">Explore &rarr;</span>
+              </div>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+</BaseLayout>
+
+<style>
+  .page-header { padding: clamp(3rem, 7vw, 5rem) 0; }
+  .page-header h1 { color: #ffffff; }
+
+  .subjects-grid {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 1.5rem;
+  }
+  @media (min-width: 640px) {
+    .subjects-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (min-width: 900px) {
+    .subjects-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+
+  .subject-card {
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    transition: box-shadow 0.22s var(--ease), transform 0.22s var(--ease);
+    height: 100%;
+  }
+  .subject-card:hover {
+    box-shadow: 0 6px 28px rgba(28, 28, 46, 0.10);
+    transform: translateY(-3px);
+  }
+  .subject-colour-bar {
+    display: block;
+    height: 5px;
+    background: var(--subject-colour, var(--green));
+    flex-shrink: 0;
+  }
+  .subject-card-body {
+    padding: 1.6rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  .subject-card h2 {
+    font-size: clamp(1.1rem, 2vw, 1.3rem);
+    margin-bottom: 0.3rem;
+    color: var(--charcoal);
+  }
+  .subject-tagline {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--subject-colour, var(--green));
+    margin-bottom: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .subject-desc {
+    font-size: 0.93rem;
+    color: var(--muted);
+    flex: 1;
+    margin-bottom: 1rem;
+  }
+  .subject-link {
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--green);
+  }
+</style>

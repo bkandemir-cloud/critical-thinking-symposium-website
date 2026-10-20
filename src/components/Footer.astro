@@ -1,0 +1,84 @@
+---
+const year = new Date().getFullYear();
+---
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div class="footer-brand">
+      <p class="brand-name">Critical Thinking Symposium</p>
+      <p class="tagline"><em>Slow down. Think deeper.</em></p>
+      <p class="footer-copy">
+        A toolkit for teachers supporting students applying to UK university humanities programmes.
+      </p>
+    </div>
+    <nav aria-label="Footer navigation">
+      <ul>
+        <li><a href="/toolkit/">Interview Toolkit</a></li>
+        <li><a href="/deep-dive/">Deep Dive Reading</a></li>
+        <li><a href="/subjects/">By Subject</a></li>
+        <li><a href="/news/">News &amp; Events</a></li>
+        <li><a href="/resources/">Courses &amp; Resources</a></li>
+        <li><a href="/about/">About</a></li>
+      </ul>
+    </nav>
+  </div>
+  <div class="container footer-base">
+    <p>&copy; {year} Critical Thinking Symposium &mdash; Dr Beth Kandemir</p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    background: var(--charcoal);
+    color: #c8c8de;
+    margin-top: 0;
+  }
+  .footer-inner {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 2rem;
+    padding-top: 3rem;
+    padding-bottom: 2rem;
+  }
+  .footer-brand { max-width: 26rem; }
+  .brand-name {
+    font-family: var(--font-serif);
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #ffffff;
+    margin: 0 0 0.25rem;
+  }
+  .tagline {
+    font-family: var(--font-serif);
+    font-size: 1rem;
+    color: var(--green-light);
+    margin: 0 0 0.8rem;
+  }
+  .footer-copy {
+    font-size: 0.9rem;
+    color: #9898b4;
+    margin: 0;
+  }
+  nav ul {
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  nav a {
+    color: #c8c8de;
+    text-decoration: none;
+    font-size: 0.95rem;
+    transition: color 0.22s;
+  }
+  nav a:hover { color: #ffffff; }
+  .footer-base {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 1.2rem;
+    padding-bottom: 1.6rem;
+  }
+  .footer-base p { font-size: 0.85rem; margin: 0; opacity: 0.65; }
+</style>
